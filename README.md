@@ -9,8 +9,8 @@ ku岛只看po和只看图片的插件。
   请不要吐槽文件
   
   
-### 使用github源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
+使用github源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
     javascript:(function(){var f=document.createElement('script');f.src='https://cdn.rawgit.com/nostarsnow/onlyPoAndImage/master/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();
   
-### 使用阿里云源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
+使用阿里云源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
     javascript:(function(){var f=document.createElement('script');f.src='http://www.yunjiayigou.com/js/lib/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();
