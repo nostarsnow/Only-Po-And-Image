@@ -9,10 +9,8 @@ ku岛只看po和只看图片的插件。
   请不要吐槽文件
   
   
-### 使用github源
-[添加到书签。进入ku岛串内之后点一下即可（使用github源文件）](javascript:(function(){var f=document.createElement('script');f.src='https://cdn.rawgit.com/nostarsnow/onlyPoAndImage/master/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();)<br />
+### 使用github源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
+    javascript:(function(){var f=document.createElement('script');f.src='https://cdn.rawgit.com/nostarsnow/onlyPoAndImage/master/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();
   
-### 使用国内阿里云源（不能保证稳定。因为服务器不是我的）
-[添加到书签。进入ku岛串内之后点一下即可（使用阿里云源文件）](javascript:(function(){var f=document.createElement('script');f.src='http://www.yunjiayigou.com/js/lib/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();)<br />
-1.[点击这里你可以链接到www.google.com](http://www.google.com)<br />
-2.[点击这里我你可以链接到我的博客](http://guoyunsky.iteye.com)<br />
+### 使用阿里云源。使用方法：将以下代码添加到书签内。进入ku岛串内之后点一下即可。类似于acfunfix。
+    javascript:(function(){var f=document.createElement('script');f.src='http://www.yunjiayigou.com/js/lib/onlyPoAndImg.min.js?ran='+new Date().getTime();document.body.appendChild(f);})();
