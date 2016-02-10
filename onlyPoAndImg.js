@@ -54,27 +54,29 @@ var tips = ns.tips = {
 	noMoreReplys : "没有更多评论了！",
 	noName : "无名氏",
 	noTitle : "无标题",
-	noKuChuan : "请在ku岛的串下运行此插件！",
-	noKu : "请在ku岛运行此插件！"
+	noKuChuan : "请在ku岛或A岛的串下运行此插件！",
+	noKu : "请在ku岛或A岛运行此插件！"
 };
 var api = ns.api = {
-	host : window.location.href.split('?')[0].match(/(.*)\/(\d*)/),
+	host : window.location.href.split('?')[0].match(/(.*)(\/t\/)(\d*)/),
 	format : ".json",
 	hostname : window.location.hostname
 };
-if ( api.host[2] == "" ){
+if ( api.host[1] == "" ){
 	alert(ns.tips.noKuChuan);
 	return false;
 }else{
-	api.host = api.host[0];
+	api.host = api.host[1]+'/api'+api.host[2]+api.host[3];
 }
 if ( api.hostname.indexOf('ku') > -1 ){
 	api.imageServer = 'http://static.koukuko.com/h';
+}else if( api.hostname.indexOf('niming') > -1 ){
+	api.imageServer = 'http://cdn.ovear.info:8998';
 }else{
 	alert(ns.tips.noKu);
 	return false;
 }
-api.url = ns.api.url = api.host + api.format;
+api.url = ns.api.url = api.host;
 var pagination = {
 	first : {
 		can : '<a data-href="1">首页</a>',
