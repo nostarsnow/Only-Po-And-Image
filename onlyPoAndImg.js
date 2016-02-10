@@ -62,12 +62,6 @@ var api = ns.api = {
 	format : ".json",
 	hostname : window.location.hostname
 };
-if ( api.host[1] == "" ){
-	alert(ns.tips.noKuChuan);
-	return false;
-}else{
-	api.host = api.host[1]+'/api'+api.host[2]+api.host[3];
-}
 if ( api.hostname.indexOf('ku') > -1 ){
 	api.imageServer = 'http://static.koukuko.com/h';
 }else if( api.hostname.indexOf('niming') > -1 ){
@@ -75,6 +69,12 @@ if ( api.hostname.indexOf('ku') > -1 ){
 }else{
 	alert(ns.tips.noKu);
 	return false;
+}
+if ( !api.host ){
+	alert(ns.tips.noKuChuan);
+	return false;
+}else{
+	api.host = api.host[1]+'/api'+api.host[2]+api.host[3];
 }
 api.url = ns.api.url = api.host;
 var pagination = {
