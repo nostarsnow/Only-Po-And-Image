@@ -415,5 +415,10 @@ var init = function(){
 	initButton();
 }
 init();
+if ( typeof define === "function" && define.amd ) {
+	define("nostar", [], function() {
+		return nostar;
+	});
+}
 window.nostar = nostar;
 })(window,jQuery);
