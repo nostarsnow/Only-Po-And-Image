@@ -101,6 +101,8 @@ var $showBox = $(".h-threads-list");
 var $showEl = $("#h-content .h-threads-list .h-threads-item-replys");
 var $pagination = $(".h-pagination");
 var $onlyPo,$onlyImg,$page_first,$page_prev,$page_next,$page_last,$page_more,$page_now,$page_all,$loading;
+var showBoxScrollTop = $showBox.offset().top;
+var pageDisabledClass = 'uk-disabled';
 var initLoading = function(){
 	$loading = $('<div style="position:fixed;left:0;top:0;z-index:777;background-color:rgba(0,0,0,.7);width:100%;height:100%;display:none;"><div class="uk-progress uk-progress-small uk-progress-danger uk-progress-striped uk-active" style="position: absolute;width: 50%;height:15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;line-height: 15px;"><div class="uk-progress-bar" style="width: 100%;">Loading......</div></div></div>').appendTo($body);
 	ns.load = function(){
@@ -111,9 +113,11 @@ var initLoading = function(){
 	}
 }
 var initButton = function(){
-	$onlyPo = $('<button class="uk-button uk-margin-left uk-margin-right onlyPo" data-type="po" type="button">只看po</button>');
-	$onlyImg = $('<button class="uk-button onlyImg" data-type="image" type="button">只看图片</button>');
-	$poTitle.find(".h-threads-info").append($onlyPo,$onlyImg);
+	$onlyPo = $('<button class="uk-button uk-margin-left onlyPo" data-type="po" type="button">只看po</button>');
+	$onlyImg = $('<button class="uk-button uk-margin-left uk-margin-right onlyImg" data-type="image" type="button">只看图片</button>');
+	$lookAll = $('<button class="uk-button uk-hidden lookAll" data-type="all" type="button">不限用户类型</button>');
+	$poTitle.find(".h-threads-info").append($onlyPo,$onlyImg,$lookAll);
+	var $button = $poTitle.find(".h-threads-info .uk-button");
 	var buttonClick = function(){
 		var $t = $(this),
 			type = $t.data("type");
@@ -122,8 +126,7 @@ var initButton = function(){
 		}
 		push.typeChanged = true;
 		push.page = 1;
-		$onlyPo.removeClass("uk-button-primary");
-		$onlyImg.removeClass("uk-button-primary");
+		$button.removeClass("uk-button-primary uk-hidden");
 		$t.addClass('uk-button-primary');
 		push.type = type;
 		$.when(getReplys())
@@ -152,9 +155,8 @@ var initButton = function(){
 			pushHtml();
 		})
 	}
-	$onlyPo.on("click",buttonClick);
-	$onlyImg.on("click",buttonClick);
-	$('html, body').animate({scrollTop:$showBox.offset().top},300);
+	$button.on("click",buttonClick);
+	$('html, body').animate({scrollTop:showBoxScrollTop},300);
 }
 var initPagination = function(){
 	var html = '';
@@ -181,15 +183,22 @@ var initPagination = function(){
 		push.paginationInit = true;
 		$pagination.on('click','li',function(){
 			var $t = $(this);
-			if ( $t.hasClass('uk-active') || $t.hasClass('page_more') || $t.hasClass('uk-disabled') || $t.hasClass('page_page') || ns.clickLocked ){
+			if ( $t.hasClass('uk-active') || $t.hasClass('page_more') || $t.hasClass(pageDisabledClass) || $t.hasClass('page_page') || ns.clickLocked ){
 				return false;
 			}
 			ns.clickLocked = true;
 			var pageHref = $t.find(':first').data("href"),
 				replys = push.showReplys;
 			if ( pageHref === 'next' ){	
+				if ( get.loaded && push.page >= push.allPage ){
+					ush.page = push.allPage;
+					return false;
+				}
 				push.page++;
 			}else if ( pageHref === 'prev' ){
+				if ( get.loaded && push.page === 1 ){
+					return false;
+				}
 				push.page--;
 			}else if ( pageHref === 'last' ){
 				push.page = push.allPage;
@@ -199,10 +208,7 @@ var initPagination = function(){
 			if ( push.page < 1 ){
 				push.page = 1;
 			}
-			if ( push.page > push.allPage ){
-				push.page = push.allPage;
-			}
-			if ( pageHref === 'next' ){
+			if ( pageHref === 'next' || push.page === push.allPage ){
 				var first = replys[push.size*(push.page-1)],
 					last = replys[push.size*push.page];
 				if ( $pagination.find(".page_"+push.page).length < 1 ){
@@ -221,6 +227,17 @@ var initPagination = function(){
 				pushHtml();
 			}
 		});
+		$(document).on("keydown",function(e) {
+			e = window.event || e;
+			switch(e.keyCode){
+			    case 37:
+			    	$page_prev.trigger('click');
+			    	break;
+			    case 39:
+			    	$page_next.trigger('click');
+			    	break;
+			  }
+		});
 	}
 }
 function initReplys(){
@@ -234,6 +251,9 @@ var checkType = function(reply,type){
 	}
 	if ( type === 'image' ){
 		return (reply.image !== '' && reply.thumb !== '');
+	}
+	if ( type === 'all' ){
+		return true;
 	}
 }
 var getReplys = function(type){
@@ -334,20 +354,20 @@ function pushHtml(){
 		$page_all.html(push.allPage);
 	}
 	if ( push.page !== 1 ){
-		$page_first.removeClass('uk-disabled').html(pagination.first.can);
-		$page_prev.removeClass('uk-disabled').html(pagination.prev.can);
+		$page_first.removeClass(pageDisabledClass).html(pagination.first.can);
+		$page_prev.removeClass(pageDisabledClass).html(pagination.prev.can);
 	}else{
-		$page_first.addClass('uk-disabled').html(pagination.first.no);
-		$page_prev.addClass('uk-disabled').html(pagination.prev.no);
+		$page_first.addClass(pageDisabledClass).html(pagination.first.no);
+		$page_prev.addClass(pageDisabledClass).html(pagination.prev.no);
 	}
 	if ( (push.page !== push.allPage || !get.loaded) && push.allPage > 1 ){
-		$page_next.removeClass('uk-disabled').html(pagination.next.can);
-		$page_last.removeClass('uk-disabled').html(pagination.last.can);
+		$page_next.removeClass(pageDisabledClass).html(pagination.next.can);
+		$page_last.removeClass(pageDisabledClass).html(pagination.last.can);
 	}else{
-		$page_next.addClass('uk-disabled').html(pagination.next.no);
-		$page_last.addClass('uk-disabled').html(pagination.last.no);
+		$page_next.addClass(pageDisabledClass).html(pagination.next.no);
+		$page_last.addClass(pageDisabledClass).html(pagination.last.no);
 	}
-	$('html, body').animate({scrollTop:$showBox.offset().top},150,function(){
+	$('html, body').animate({scrollTop:showBoxScrollTop},150,function(){
 		ns.loadHide();
 	});
 	ns.clickLocked = false;
