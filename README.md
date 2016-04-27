@@ -13,4 +13,4 @@ ku岛和A岛只看po和只看图片的插件。
     javascript:(function(){var f=document.createElement('script');f.src='https://cdn.rawgit.com/nostarsnow/onlyPoAndImage/master/onlyPoAndImg.min.js?xl_r='+new Date().getTime();document.body.appendChild(f);})();
   
 ### 2、使用阿里云源。不是特别稳定。因为不是我的服务器。不过速度比上面那个好的多。使用方法：将以下代码添加为一个书签。进入ku岛或A岛串内之后点一下即可。类似于acfunfix、有道云翻译网页版等。  
-    javascript:(function(){var f=document.createElement('script');f.src='http://www.yunjiayigou.com/js/lib/onlyPoAndImg.min.js?xl_r='+new Date().getTime();document.body.appendChild(f);})();
+    javascript:(function(){var f=document.createElement('script');f.src='http://nostar.jinboran.com/ns/Only-Po-And-Image/onlyPoAndImg.min.js?xl_r='+new Date().getTime();document.body.appendChild(f);})();
