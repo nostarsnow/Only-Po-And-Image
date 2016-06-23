@@ -60,12 +60,15 @@ var tips = ns.tips = {
 var api = ns.api = {
 	host : window.location.href.split('?')[0].match(/(.*)(\/t\/)(\d*)/),
 	format : ".json",
-	hostname : window.location.hostname
+	hostname : window.location.hostname,
+	isKu : false,
+	kuImgDebug : 'qiniu/'
 };
 if ( api.hostname.indexOf('ku') > -1 ){
-	api.imageServer = 'http://static.koukuko.com/h';
+	api.isKu = true;
+	api.imageServer = 'http://static.kukuku.cc';
 }else if( api.hostname.indexOf('niming') > -1 ){
-	api.imageServer = 'http://cdn.ovear.info:8998';
+	api.imageServer = 'http://img1.nimingban.com';
 }else{
 	alert(ns.tips.noKu);
 	return false;
@@ -74,9 +77,13 @@ if ( !api.host ){
 	alert(ns.tips.noKuChuan);
 	return false;
 }else{
-	api.host = api.host[1]+'/api'+api.host[2]+api.host[3];
+	if ( api.isKu ){
+		api.url = ns.api.url = 'http://wx.aiweimob.com/vote/conn/ajax/card/api.php?topicId=' + api.host[3];
+	}else{
+		api.url = ns.api.url = api.host[1]+'/api'+api.host[2]+api.host[3];
+	}
 }
-api.url = ns.api.url = api.host;
+
 var pagination = {
 	first : {
 		can : '<a data-href="1">首页</a>',
@@ -104,7 +111,7 @@ var $onlyPo,$onlyImg,$page_first,$page_prev,$page_next,$page_last,$page_more,$pa
 var showBoxScrollTop = $showBox.offset().top;
 var pageDisabledClass = 'uk-disabled';
 var initLoading = function(){
-	$loading = $('<div style="position:fixed;left:0;top:0;z-index:777;background-color:rgba(0,0,0,.7);width:100%;height:100%;display:none;"><div class="uk-progress uk-progress-small uk-progress-danger uk-progress-striped uk-active" style="position: absolute;width: 50%;height:15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;line-height: 15px;"><div class="uk-progress-bar" style="width: 100%;">Loading......</div></div></div>').appendTo($body);
+	$loading = $('<div style="position:fixed;left:0;top:0;z-index:777;background-color:rgba(0,0,0,.7);width:100%;height:100%;display:none;"><div class="uk-progress uk-progress-small uk-progress-danger uk-progress-striped uk-active" style="position: absolute;width: 50%;height:15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;line-height: 15px;"><div class="uk-progress-bar" style="width: 100%; color:#fff;text-align:center;">Loading......</div></div></div>').appendTo($body);
 	ns.load = function(){
 		$loading.fadeIn(100);
 	}
@@ -402,8 +409,13 @@ var replysHtml = ns.replysHtml = function(replys){
 							'</a>' +
 						'</div>';
 		if ( reply.image !== "" || reply.thumb !== "" ){
-			var imageUrl = api.imageServer + reply.image,
-				thumbUrl = api.imageServer + reply.thumb;
+			if ( api.isKu ){
+				var imageUrl = api.imageServer + reply.image.replace(api.kuImgDebug,""),
+					thumbUrl = api.imageServer + reply.image.replace(api.kuImgDebug,"");
+			}else{
+				var imageUrl = api.imageServer + reply.image,
+					thumbUrl = api.imageServer + reply.thumb;
+			}
 			html += '<div class="h-threads-img-box">' +
 						'<div class="h-threads-img-tool uk-animation-slide-top">' +
 							'<span class="h-threads-img-tool-btn h-threads-img-tool-small uk-button-link">' +
